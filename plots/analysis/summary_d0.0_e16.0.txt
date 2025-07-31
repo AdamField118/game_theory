@@ -1,0 +1,34 @@
+
+GAME SIMULATION SUMMARY
+=====================================
+
+Simulation Parameters:
+- δ (tie bonus): 0.0
+- ε (winning bonus): 16.0
+- Vertices: 300
+- Time steps: 400
+- Temperature: 100.0
+- β: 0.01
+- Random seed: 42
+
+Community Classification:
+- Type: Drifting
+- Condition: ε > 2δ
+
+Final State Analysis:
+- Rock (0): 203 players (67.7%)
+- Paper (1): 23 players (7.7%)
+- Scissors (2): 74 players (24.7%)
+
+Diversity Metrics:
+- Initial Shannon diversity: 1.096
+- Final Shannon diversity: 0.806
+- Diversity change: -0.289
+
+Community Structure:
+- Number of communities: 11
+- Average community size: 30.9 (std: 26.3)
+- Largest community: 105
+- Smallest community: 11
+
+Generated: 2025-07-31 13:56:21

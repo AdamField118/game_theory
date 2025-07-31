@@ -1,0 +1,2 @@
+/home/adfield/game_theory/scripts/create_comparison.py:167: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  plt.tight_layout()

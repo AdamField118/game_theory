@@ -1,0 +1,71 @@
+==========================================
+GAME THEORY SIMULATION
+==========================================
+Job ID: 1533002
+Job Name: stationary_communities
+Node: gpu-4-13
+Partition: short
+Start Time: Thu Jul 31 13:56:15 EDT 2025
+==========================================
+Environment activated
+Checking GPU availability...
+JAX devices: [CudaDevice(id=0)]
+Simulation Parameters:
+  δ (delta): 0.5
+  ε (epsilon): 0.0
+  Vertices: 300
+  Time steps: 400
+  Temperature: 100.0
+  β (beta): 0.01
+  Random seed: 42
+==========================================
+Starting simulation...
+Output directories created in: /home/adfield/game_theory/plots
+============================================================
+GAME THEORY SIMULATION
+============================================================
+Parameters:
+  δ (tie bonus): 0.5
+  ε (winning bonus): 0.0
+  Vertices: 300
+  Time steps: 400
+  Temperature: 100.0
+  β: 0.01
+  Random seed: 42
+  Output dir: plots
+  JAX devices: ['cuda:0']
+GPU acceleration available
+============================================================
+Initializing simulation...
+Initialized game with payoff matrix:
+A(δ=0.5, ε=0.0) =
+[[1.5 0.  2. ]
+ [2.  1.5 0. ]
+ [0.  2.  1.5]]
+Running simulation...
+Simulation completed in 1.16 seconds
+Creating visualization...
+Plot saved to: plots/evolution_d0.5_e0.0.png
+Data saved to: plots/data/simulation_d0.5_e0.0_20250731_135622.npz
+Parameters saved to: plots/data/parameters_d0.5_e0.0_20250731_135622.json
+Data saved to: plots/data/simulation_d0.5_e0.0_20250731_135622.npz
+Summary saved to: plots/analysis/summary_d0.5_e0.0.txt
+============================================================
+SIMULATION COMPLETE
+============================================================
+==========================================
+Simulation completed with return code: 0
+End Time: Thu Jul 31 13:56:22 EDT 2025
+Output files generated:
+-rw-r--r-- 1 adfield adfield 53213 Jul 31 13:56 plots/evolution_d0.0_e16.0.png
+-rw-r--r-- 1 adfield adfield 68723 Jul 31 13:56 plots/evolution_d0.5_e0.0.png
+total 36
+drwxrwxr-x 2 adfield adfield     4 Jul 31 13:56 .
+drwxrwxr-x 5 adfield adfield     5 Jul 31 13:56 ..
+-rw-r--r-- 1 adfield adfield   332 Jul 31 13:56 parameters_d0.0_e16.0_20250731_135621.json
+-rw-r--r-- 1 adfield adfield   331 Jul 31 13:56 parameters_d0.5_e0.0_20250731_135622.json
+-rw-r--r-- 1 adfield adfield 12410 Jul 31 13:56 simulation_d0.0_e16.0_20250731_135621.npz
+-rw-r--r-- 1 adfield adfield 22713 Jul 31 13:56 simulation_d0.5_e0.0_20250731_135622.npz
+==========================================
+JOB COMPLETE
+==========================================

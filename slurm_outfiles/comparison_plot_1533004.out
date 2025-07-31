@@ -1,0 +1,16 @@
+============================================================
+CREATING COMPARISON PLOTS
+============================================================
+Found 2 simulation files:
+  simulation_d0.5_e0.0_20250731_135622.npz
+  simulation_d0.0_e16.0_20250731_135621.npz
+Loaded: δ=0.5, ε=0.0 from simulation_d0.5_e0.0_20250731_135622.npz
+Loaded: δ=0.0, ε=16.0 from simulation_d0.0_e16.0_20250731_135621.npz
+Creating comparison plot with 2 simulations...
+Comparison plot saved: plots/analysis/comparison_plot.png
+Analysis plot 1 saved: plots/analysis/analysis_d0.5_e0.0.png
+Analysis plot 2 saved: plots/analysis/analysis_d0.0_e16.0.png
+Figure 1 reproduction saved: plots/figure_1_reproduction.png
+============================================================
+COMPARISON PLOTS COMPLETE
+============================================================

@@ -1,0 +1,20 @@
+{
+  "parameters": {
+    "delta": 0.0,
+    "epsilon": 16.0,
+    "vertices": 300,
+    "time_steps": 400,
+    "temperature": 100.0,
+    "beta": 0.01,
+    "seed": 42
+  },
+  "metadata": {
+    "timestamp": "20250731_135621",
+    "shape": [
+      400,
+      300
+    ],
+    "n_strategies": 3,
+    "final_diversity": 0.8064558156596615
+  }
+}

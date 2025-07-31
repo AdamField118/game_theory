@@ -1,0 +1,68 @@
+==========================================
+GAME THEORY SIMULATION
+==========================================
+Job ID: 1533003
+Job Name: drifting_communities
+Node: gpu-5-01
+Partition: short
+Start Time: Thu Jul 31 13:56:15 EDT 2025
+==========================================
+Environment activated
+Checking GPU availability...
+JAX devices: [CpuDevice(id=0)]
+Simulation Parameters:
+  δ (delta): 0.0
+  ε (epsilon): 16.0
+  Vertices: 300
+  Time steps: 400
+  Temperature: 100.0
+  β (beta): 0.01
+  Random seed: 42
+==========================================
+Starting simulation...
+Output directories created in: /home/adfield/game_theory/plots
+============================================================
+GAME THEORY SIMULATION
+============================================================
+Parameters:
+  δ (tie bonus): 0.0
+  ε (winning bonus): 16.0
+  Vertices: 300
+  Time steps: 400
+  Temperature: 100.0
+  β: 0.01
+  Random seed: 42
+  Output dir: plots
+  JAX devices: ['TFRT_CPU_0']
+No GPU detected, using CPU
+============================================================
+Initializing simulation...
+Initialized game with payoff matrix:
+A(δ=0.0, ε=16.0) =
+[[ 1.  0. 18.]
+ [18.  1.  0.]
+ [ 0. 18.  1.]]
+Running simulation...
+Simulation completed in 0.78 seconds
+Creating visualization...
+Plot saved to: plots/evolution_d0.0_e16.0.png
+Data saved to: plots/data/simulation_d0.0_e16.0_20250731_135621.npz
+Parameters saved to: plots/data/parameters_d0.0_e16.0_20250731_135621.json
+Data saved to: plots/data/simulation_d0.0_e16.0_20250731_135621.npz
+Summary saved to: plots/analysis/summary_d0.0_e16.0.txt
+============================================================
+SIMULATION COMPLETE
+============================================================
+==========================================
+Simulation completed with return code: 0
+End Time: Thu Jul 31 13:56:22 EDT 2025
+Output files generated:
+-rw-r--r-- 1 adfield adfield 53213 Jul 31 13:56 plots/evolution_d0.0_e16.0.png
+total 13
+drwxrwxr-x 2 adfield adfield     2 Jul 31 13:56 .
+drwxrwxr-x 5 adfield adfield     4 Jul 31 13:56 ..
+-rw-r--r-- 1 adfield adfield   332 Jul 31 13:56 parameters_d0.0_e16.0_20250731_135621.json
+-rw-r--r-- 1 adfield adfield 12410 Jul 31 13:56 simulation_d0.0_e16.0_20250731_135621.npz
+==========================================
+JOB COMPLETE
+==========================================

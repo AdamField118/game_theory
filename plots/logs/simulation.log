@@ -1,0 +1,4 @@
+[2025-07-31 13:56:20] [INFO] Starting simulation: δ=0.0, ε=16.0, vertices=300, steps=400
+[2025-07-31 13:56:20] [INFO] Starting simulation: δ=0.5, ε=0.0, vertices=300, steps=400
+[2025-07-31 13:56:21] [INFO] Simulation completed in 0.78 seconds
+[2025-07-31 13:56:22] [INFO] Simulation completed in 1.16 seconds
