@@ -66,8 +66,8 @@ python main.py --preset original_drifting
 ## Results 
 
 Here is the recreation of figure 1 by this code:
-![comparison plot](./plots/analysis/comparison_plots.png)
-Note: There is a [figure_1_reproduction.png](./plots/figure_1_reproduction.png) that is better formatted with a color bar and a title, but it currently is not formatted well.
+![comparison plot](./plots/analysis/comparison_plot.png)
+Note: There is a [figure_1_reproduction.png](./plots/figure_1_reproduction.png) that has a color bar and a title, but it currently is not formatted well.
 
 Here are analysis plots of different evolutions:  
 Analysis of the δ=0, ε=16 evolution:
