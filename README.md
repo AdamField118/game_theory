@@ -27,6 +27,12 @@ In order to run a game with your chosen parameters submit:
 sbatch --export=DELTA=0.5,EPSILON=0 scripts/run_simulation.sh
 ```
 
+There are also presets available:
+```bash
+sbatch --export=PRESET=original_stationary scripts/run_simulation.sh
+sbatch --export=PRESET=original_drifting scripts/run_simulation.sh
+```
+
 If you do not have SLURM, try:
 
 ```bash
@@ -38,6 +44,10 @@ python main.py --delta 0 --epsilon 16
 
 # Custom parameters
 python main.py --delta 0.3 --epsilon 0.8 --vertices 500 --time_steps 600
+
+# Presets
+python main.py --preset original_stationary
+python main.py --preset original_drifting
 ```
 
 ## Output Files
@@ -68,3 +78,41 @@ Analysis of the δ=0.5, ε=0 evolution:
 ## References
 
 Olson, C., Belmonte, A., & Griffin, C. (2022). Community Formation in Wealth-Mediated Thermodynamic Strategy Evolution. *arXiv preprint arXiv:2206.13160*.
+
+# Zero-sum games
+
+Extending this work, Dr. Jackson Henry has requested I explore the idea of zero-sum payouts, which basically means when you lose, you decrement the bank by the same amount you increment the bank when you win, getting nothing for a tie. 
+
+To explore this idea I implemented the ability to run zero sum games by submitting:
+```bash
+# Zero-sum simulation
+sbatch --export=PRESET=zero_sum_512 scripts/run_simulation.sh
+
+# Custom parameters
+sbatch --export=PAYOFF_SCHEME=zero_sum,VERTICES=512,INITIAL_PATTERN=striped,INITIAL_BANK_VALUE=-1000,time_steps=400 scripts/run_simulation.sh
+```
+You can also specify `--stripe_size`, the default simply splits the ring into three (ex. 512 vertices -> 170 rock, 170 paper, 170 scissors, then 2 more rock).
+
+Along with this `INITIAL_PATTERN` can be either random or striped, defaulting to striped.
+
+The default for `INITIAL_BANK_VALUE` is zero.
+
+Note, right now every zero sum game uses deterministic selection, which basically means the agent decides its next method based on it's adjacent agent's current strategy and bank value. In the event of a tie the it will choose it's method based on a priority of rock->paper->scissors (ex. rock tie anything = rock, paper tie scissors = paper).
+If you run a wealth-mediated game it automatically chooses the Boltzmann selection described in the paper.
+
+## Results
+
+With the preset, which is three equal stripes, -1000 initial bank value, (-1,0,1) reward scheme, and 400 time steps, it results in this graph:
+![zero-sum preset game](./plots/zero_sum_evolution_512agents_400steps.png)
+
+I also ran the same simulation but just 50 time steps:
+![zero-sum preset game](./plots/zero_sum_evolution_512agents_50steps.png)
+
+And I ran the same simulation but with 6 vertices (agents) and 10 time steps:
+![zero-sum preset game](./plots/zero_sum_evolution_6agents_10steps.png)
+
+## Analysis
+
+Notice the clear oscillation in the simple 6 vertices 10 time step game. This shows the deterministic nature. 
+
+Note, Dr. Jackson gets different results here so this may or may not be incorrect.

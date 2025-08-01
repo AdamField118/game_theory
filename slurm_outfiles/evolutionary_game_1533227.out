@@ -1,0 +1,113 @@
+==============================================
+SEPARATED EVOLUTIONARY GAME SIMULATION
+==============================================
+Job ID: 1533227
+Job Name: evolutionary_game
+Node: gpu-3-01
+Partition: short
+Start Time: Thu Jul 31 21:06:28 EDT 2025
+==============================================
+Environment activated
+Checking GPU availability...
+JAX devices: [CudaDevice(id=0)]
+Simulation Parameters:
+  Game type: wealth_mediated
+  Vertices: 300
+  Time steps: 400
+  Random seed: 42
+  --- Wealth-Mediated Parameters ---
+  δ (tie bonus): 0.5
+  ε (winning bonus): 0.0
+  Temperature: 100.0
+  β (beta): 0.01
+  Preset configuration: zero_sum_512
+==============================================
+Starting simulation...
+Executing: python main.py     --payoff_scheme wealth_mediated     --vertices 300     --time_steps 400     --seed 42     --use_gpu     --save_data --delta 0.5 --epsilon 0.0 --temperature 100.0 --beta 0.01 --preset zero_sum_512
+Applied preset: zero_sum_512
+Output directories created in: /home/adfield/game_theory/plots
+======================================================================
+EVOLUTIONARY GAME SIMULATION
+======================================================================
+Game type: zero_sum
+Vertices: 512
+Time steps: 400
+Random seed: 42
+Initial pattern: striped
+Initial bank value: -1000.0
+Stripe size: 170
+Output dir: plots
+JAX devices: ['cuda:0']
+GPU acceleration available
+======================================================================
+Initialized Zero-Sum Evolutionary Game:
+  Vertices: 512
+  Initial pattern: striped
+  Initial bank value: -1000.0
+  Stripe size: 170
+  Total system wealth: -512000.0
+  Zero-sum payoff matrix:
+[[ 0 -1  1]
+ [ 1  0 -1]
+ [-1  1  0]]
+Running zero-sum simulation...
+Simulation completed in 2.01 seconds
+Wealth conservation check:
+  Expected total: -512000.0
+  Actual total: -512000.0
+  Max deviation: 0.00e+00
+  Wealth conserved: True
+Plot saved to: plots/zero_sum_evolution_512agents_400steps.png
+Analysis plot saved to: plots/zero_sum_analysis_512agents_400steps.png
+Data saved to: plots/data/zero_sum_simulation_512agents_20250731_210642.npz
+Parameters saved to: plots/data/zero_sum_simulation_512agents_20250731_210642_params.json
+Data saved to: plots/data/zero_sum_simulation_512agents_20250731_210642.npz
+Summary saved to: plots/analysis/zero_sum_summary_512agents_20250731_210642.txt
+
+Final state analysis:
+  Rock: 338 agents (66.0%)
+  Paper: 172 agents (33.6%)
+  Scissors: 2 agents (0.4%)
+======================================================================
+SIMULATION COMPLETE
+======================================================================
+==============================================
+Simulation completed with return code: 0
+End Time: Thu Jul 31 21:06:42 EDT 2025
+Output files generated:
+-rw-r--r-- 1 adfield adfield  53213 Jul 31 19:57 plots/evolution_d0.0_e16.0.png
+-rw-r--r-- 1 adfield adfield  68723 Jul 31 19:57 plots/evolution_d0.5_e0.0.png
+-rw-r--r-- 1 adfield adfield 210815 Jul 31 19:57 plots/figure_1_reproduction.png
+-rw-r--r-- 1 adfield adfield 304287 Jul 31 21:06 plots/zero_sum_analysis_512agents_400steps.png
+-rw-r--r-- 1 adfield adfield 421026 Jul 31 20:02 plots/zero_sum_analysis_512agents_50steps.png
+-rw-r--r-- 1 adfield adfield 291417 Jul 31 20:03 plots/zero_sum_analysis_6agents_10steps.png
+-rw-r--r-- 1 adfield adfield  60083 Jul 31 21:06 plots/zero_sum_evolution_512agents_400steps.png
+-rw-r--r-- 1 adfield adfield  44367 Jul 31 20:02 plots/zero_sum_evolution_512agents_50steps.png
+-rw-r--r-- 1 adfield adfield  39981 Jul 31 20:03 plots/zero_sum_evolution_6agents_10steps.png
+total 57
+drwxrwxr-x 2 adfield adfield    10 Jul 31 21:06 .
+drwxrwxr-x 5 adfield adfield    12 Jul 31 21:06 ..
+-rw-r--r-- 1 adfield adfield 12433 Jul 31 19:57 simulation_d0.0_e16.0_20250731_195751.npz
+-rw-r--r-- 1 adfield adfield   372 Jul 31 19:57 simulation_d0.0_e16.0_20250731_195751_params.json
+-rw-r--r-- 1 adfield adfield 22738 Jul 31 19:57 simulation_d0.5_e0.0_20250731_195751.npz
+-rw-r--r-- 1 adfield adfield   371 Jul 31 19:57 simulation_d0.5_e0.0_20250731_195751_params.json
+-rw-r--r-- 1 adfield adfield  3384 Jul 31 20:02 zero_sum_simulation_512agents_20250731_200231.npz
+-rw-r--r-- 1 adfield adfield   374 Jul 31 20:02 zero_sum_simulation_512agents_20250731_200231_params.json
+-rw-r--r-- 1 adfield adfield 13815 Jul 31 21:06 zero_sum_simulation_512agents_20250731_210642.npz
+-rw-r--r-- 1 adfield adfield   375 Jul 31 21:06 zero_sum_simulation_512agents_20250731_210642_params.json
+-rw-r--r-- 1 adfield adfield  1739 Jul 31 20:03 zero_sum_simulation_6agents_20250731_200320.npz
+-rw-r--r-- 1 adfield adfield   370 Jul 31 20:03 zero_sum_simulation_6agents_20250731_200320_params.json
+total 404
+drwxrwxr-x 2 adfield adfield      8 Jul 31 21:06 .
+drwxrwxr-x 5 adfield adfield     12 Jul 31 21:06 ..
+-rw-r--r-- 1 adfield adfield 164616 Jul 31 19:57 analysis_d0.0_e16.0.png
+-rw-r--r-- 1 adfield adfield 186624 Jul 31 19:57 analysis_d0.5_e0.0.png
+-rw-r--r-- 1 adfield adfield  53700 Jul 31 19:57 comparison_plot.png
+-rw-r--r-- 1 adfield adfield    728 Jul 31 19:57 summary_d0.0_e16.0_20250731_195751.txt
+-rw-r--r-- 1 adfield adfield    728 Jul 31 19:57 summary_d0.5_e0.0_20250731_195751.txt
+-rw-r--r-- 1 adfield adfield   1578 Jul 31 20:02 zero_sum_summary_512agents_20250731_200231.txt
+-rw-r--r-- 1 adfield adfield   1581 Jul 31 21:06 zero_sum_summary_512agents_20250731_210642.txt
+-rw-r--r-- 1 adfield adfield   1555 Jul 31 20:03 zero_sum_summary_6agents_20250731_200320.txt
+==============================================
+JOB COMPLETE
+==============================================
