@@ -308,3 +308,355 @@ def create_comparison_plot(
     plt.close()
     
     return str(filepath)
+
+def create_zero_sum_analysis_plot(
+    strategy_history: Union[np.ndarray, jnp.ndarray],
+    bank_history: Union[np.ndarray, jnp.ndarray],
+    output_dir: str = "plots",
+    figsize: tuple = (20, 12)
+) -> str:
+    """
+    Create comprehensive analysis plot specifically for zero-sum evolutionary dynamics.
+    
+    Args:
+        strategy_history: Array of shape (time_steps, n_vertices) with strategy evolution
+        bank_history: Array of shape (time_steps, n_vertices) with bank evolution
+        output_dir: Output directory for plots
+        figsize: Figure size
+        
+    Returns:
+        Path to saved figure
+    """
+    if isinstance(strategy_history, jnp.ndarray):
+        strategy_history = np.array(strategy_history)
+    if isinstance(bank_history, jnp.ndarray):
+        bank_history = np.array(bank_history)
+    
+    fig = plt.figure(figsize=figsize)
+    gs = fig.add_gridspec(3, 4, height_ratios=[2, 1, 1], width_ratios=[3, 2, 2, 2])
+    
+    # Colors for strategies
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c']  # Blue, Orange, Green
+    cmap = mcolors.ListedColormap(colors)
+    
+    # **MAIN STRATEGY EVOLUTION PLOT** (large, left side)
+    ax_main = fig.add_subplot(gs[:2, 0])
+    im = ax_main.imshow(strategy_history, aspect='auto', cmap=cmap, vmin=0, vmax=2,
+                       interpolation='nearest', origin='upper')
+    ax_main.set_title('Zero-Sum Deterministic Evolution', fontsize=16, fontweight='bold')
+    ax_main.set_xlabel('Position', fontsize=12)
+    ax_main.set_ylabel('Time', fontsize=12)
+    
+    # Add colorbar
+    cbar = plt.colorbar(im, ax=ax_main, fraction=0.02, pad=0.02)
+    cbar.set_ticks([0, 1, 2])
+    cbar.set_ticklabels(['Rock', 'Paper', 'Scissors'])
+    cbar.set_label('Strategy', fontsize=12)
+    
+    # **WEALTH CONSERVATION PLOT** (top-right)
+    ax_wealth = fig.add_subplot(gs[0, 1])
+    total_wealth = np.sum(bank_history, axis=1)
+    ax_wealth.plot(total_wealth, 'r-', linewidth=2, label='Total Wealth')
+    ax_wealth.axhline(y=total_wealth[0], color='black', linestyle='--', alpha=0.7, 
+                      label=f'Expected: {total_wealth[0]:.0f}')
+    ax_wealth.set_xlabel('Time')
+    ax_wealth.set_ylabel('Total System Wealth')
+    ax_wealth.set_title('Wealth Conservation', fontsize=12, fontweight='bold')
+    ax_wealth.legend()
+    ax_wealth.grid(True, alpha=0.3)
+    
+    # **STRATEGY FREQUENCIES** (top-center-right)
+    ax_freq = fig.add_subplot(gs[0, 2])
+    strategy_counts = np.array([
+        np.sum(strategy_history == s, axis=1) for s in range(3)
+    ]).T
+    
+    for s, (label, color) in enumerate(zip(['Rock', 'Paper', 'Scissors'], colors)):
+        ax_freq.plot(strategy_counts[:, s], label=label, color=color, alpha=0.8, linewidth=2)
+    
+    ax_freq.set_xlabel('Time')
+    ax_freq.set_ylabel('Count')
+    ax_freq.set_title('Strategy Frequencies', fontsize=12, fontweight='bold')
+    ax_freq.legend()
+    ax_freq.grid(True, alpha=0.3)
+    
+    # **WEALTH DISTRIBUTION** (top-far-right)
+    ax_wealth_dist = fig.add_subplot(gs[0, 3])
+    wealth_std = np.std(bank_history, axis=1)
+    wealth_mean = np.mean(bank_history, axis=1)
+    
+    ax_wealth_dist.plot(wealth_mean, 'purple', linewidth=2, label='Mean Wealth')
+    ax_wealth_dist.fill_between(range(len(wealth_mean)), 
+                                wealth_mean - wealth_std, 
+                                wealth_mean + wealth_std, 
+                                alpha=0.3, color='purple', label='±1 Std Dev')
+    ax_wealth_dist.set_xlabel('Time')
+    ax_wealth_dist.set_ylabel('Wealth Statistics')
+    ax_wealth_dist.set_title('Wealth Distribution', fontsize=12, fontweight='bold')
+    ax_wealth_dist.legend()
+    ax_wealth_dist.grid(True, alpha=0.3)
+    
+    # **INITIAL VS FINAL STATES** (middle row)
+    
+    # Initial state
+    ax_initial = fig.add_subplot(gs[1, 1])
+    initial_state = strategy_history[0]
+    colors_discrete = [colors[i] for i in initial_state]
+    ax_initial.scatter(range(len(initial_state)), initial_state, c=colors_discrete, s=2, alpha=0.8)
+    ax_initial.set_xlabel('Position')
+    ax_initial.set_ylabel('Strategy')
+    ax_initial.set_title('Initial State', fontsize=12, fontweight='bold')
+    ax_initial.set_yticks([0, 1, 2])
+    ax_initial.set_yticklabels(['Rock', 'Paper', 'Scissors'])
+    ax_initial.grid(True, alpha=0.3)
+    
+    # Final state
+    ax_final = fig.add_subplot(gs[1, 2])
+    final_state = strategy_history[-1]
+    colors_discrete = [colors[i] for i in final_state]
+    ax_final.scatter(range(len(final_state)), final_state, c=colors_discrete, s=2, alpha=0.8)
+    ax_final.set_xlabel('Position')
+    ax_final.set_ylabel('Strategy')
+    ax_final.set_title('Final State', fontsize=12, fontweight='bold')
+    ax_final.set_yticks([0, 1, 2])
+    ax_final.set_yticklabels(['Rock', 'Paper', 'Scissors'])
+    ax_final.grid(True, alpha=0.3)
+    
+    # Diversity over time
+    ax_diversity = fig.add_subplot(gs[1, 3])
+    diversities = []
+    for t in range(len(strategy_history)):
+        counts = np.bincount(strategy_history[t], minlength=3)
+        probs = counts / np.sum(counts)
+        entropy = -np.sum(probs * np.log(probs + 1e-10))
+        diversities.append(entropy)
+    
+    ax_diversity.plot(diversities, color='darkgreen', alpha=0.8, linewidth=2)
+    ax_diversity.set_xlabel('Time')
+    ax_diversity.set_ylabel('Shannon Entropy')
+    ax_diversity.set_title('Diversity Over Time', fontsize=12, fontweight='bold')
+    ax_diversity.grid(True, alpha=0.3)
+    
+    # **COMMUNITY ANALYSIS** (bottom row, spanning most columns)
+    ax_communities = fig.add_subplot(gs[2, :3])
+    
+    # Calculate community sizes over time
+    community_counts = []
+    avg_community_sizes = []
+    
+    sample_points = min(50, len(strategy_history))  # Sample up to 50 time points
+    time_indices = np.linspace(0, len(strategy_history)-1, sample_points, dtype=int)
+    
+    for t in time_indices:
+        communities = _calculate_community_sizes_zero_sum(strategy_history[t])
+        community_counts.append(len(communities))
+        avg_community_sizes.append(np.mean(communities) if communities else 0)
+    
+    ax_communities.plot(time_indices, community_counts, 'o-', label='Number of Communities', 
+                       alpha=0.8, markersize=4)
+    ax_communities_twin = ax_communities.twinx()
+    ax_communities_twin.plot(time_indices, avg_community_sizes, 's-', color='red', 
+                           label='Avg Community Size', alpha=0.8, markersize=4)
+    
+    ax_communities.set_xlabel('Time')
+    ax_communities.set_ylabel('Number of Communities', color='blue')
+    ax_communities_twin.set_ylabel('Average Community Size', color='red')
+    ax_communities.set_title('Community Structure Evolution', fontsize=12, fontweight='bold')
+    ax_communities.grid(True, alpha=0.3)
+    
+    # Combined legend
+    lines1, labels1 = ax_communities.get_legend_handles_labels()
+    lines2, labels2 = ax_communities_twin.get_legend_handles_labels()
+    ax_communities.legend(lines1 + lines2, labels1 + labels2, loc='best')
+    
+    # **FINAL WEALTH HISTOGRAM** (bottom-right)
+    ax_wealth_hist = fig.add_subplot(gs[2, 3])
+    final_wealth = bank_history[-1]
+    ax_wealth_hist.hist(final_wealth, bins=30, alpha=0.7, color='gold', edgecolor='black')
+    ax_wealth_hist.set_xlabel('Individual Wealth')
+    ax_wealth_hist.set_ylabel('Frequency')
+    ax_wealth_hist.set_title('Final Wealth Distribution', fontsize=12, fontweight='bold')
+    ax_wealth_hist.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    
+    # Save figure
+    filename = f"zero_sum_analysis_{len(strategy_history[0])}agents_{len(strategy_history)}steps.png"
+    filepath = Path(output_dir) / filename
+    
+    plt.savefig(filepath, dpi=150, bbox_inches='tight', facecolor='white')
+    plt.close()
+    
+    return str(filepath)
+
+def create_zero_sum_evolution_plot(
+    strategy_history: Union[np.ndarray, jnp.ndarray],
+    output_dir: str = "plots",
+    figsize: tuple = (12, 8)
+) -> str:
+    """
+    Create a clean evolution plot showing just time vs position for zero-sum dynamics.
+    This is the core visualization without all the extra analysis panels.
+    """
+    if isinstance(strategy_history, jnp.ndarray):
+        strategy_history = np.array(strategy_history)
+    
+    # Create simple figure
+    fig, ax = plt.subplots(figsize=figsize)
+    
+    # Colors for strategies - same as other plots for consistency
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c']  # Blue=Rock, Orange=Paper, Green=Scissors
+    cmap = mcolors.ListedColormap(colors)
+    
+    # Main evolution plot
+    im = ax.imshow(strategy_history, aspect='auto', cmap=cmap, vmin=0, vmax=2,
+                   interpolation='nearest', origin='upper')
+    
+    ax.set_title('Zero-Sum Deterministic Evolution', fontsize=16, fontweight='bold')
+    ax.set_xlabel('Position', fontsize=14)
+    ax.set_ylabel('Time', fontsize=14)
+    
+    # Add colorbar
+    cbar = plt.colorbar(im, ax=ax, ticks=[0, 1, 2], fraction=0.02, pad=0.04)
+    cbar.set_ticklabels(['Rock', 'Paper', 'Scissors'])
+    cbar.set_label('Strategy', fontsize=12)
+    
+    # Clean up the plot
+    ax.grid(False)  # No grid for clean look
+    
+    plt.tight_layout()
+    
+    # Save with descriptive filename
+    n_agents = strategy_history.shape[1]
+    n_steps = strategy_history.shape[0]
+    filename = f"zero_sum_evolution_{n_agents}agents_{n_steps}steps.png"
+    filepath = Path(output_dir) / filename
+    
+    plt.savefig(filepath, dpi=150, bbox_inches='tight', facecolor='white')
+    plt.close()
+    
+    return str(filepath)
+
+
+def _calculate_community_sizes_zero_sum(strategies: np.ndarray) -> list:
+    """
+    Calculate community sizes specifically optimized for zero-sum analysis.
+    Handles periodic boundary conditions properly.
+    """
+    if len(strategies) == 0:
+        return []
+    
+    communities = []
+    n = len(strategies)
+    
+    # Handle periodic boundary by extending array
+    extended_strategies = np.concatenate([strategies, strategies])
+    
+    i = 0
+    while i < n:
+        current_strategy = strategies[i]
+        size = 1
+        
+        # Count forward
+        j = i + 1
+        while j < n and strategies[j % n] == current_strategy:
+            size += 1
+            j += 1
+        
+        # Check wraparound for the first community
+        if i == 0:
+            # Check backward from end
+            k = n - 1
+            while k > j - 1 and strategies[k] == current_strategy:
+                size += 1
+                k -= 1
+            
+            # If we wrapped around completely, it's one big community
+            if size >= n:
+                return [n]
+        
+        if size >= 2:  # Only count communities of size >= 2
+            communities.append(min(size, n))  # Cap at total size
+        
+        i = j
+    
+    return communities
+
+
+def create_wealth_conservation_diagnostic(
+    bank_history: Union[np.ndarray, jnp.ndarray],
+    output_dir: str = "plots"
+) -> str:
+    """
+    Create detailed diagnostic plot for wealth conservation in zero-sum games.
+    """
+    if isinstance(bank_history, jnp.ndarray):
+        bank_history = np.array(bank_history)
+    
+    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+    
+    # Total wealth over time
+    ax1 = axes[0, 0]
+    total_wealth = np.sum(bank_history, axis=1)
+    expected_total = total_wealth[0]
+    deviation = total_wealth - expected_total
+    
+    ax1.plot(total_wealth, 'b-', linewidth=2, label='Actual Total')
+    ax1.axhline(y=expected_total, color='red', linestyle='--', linewidth=2, 
+                label=f'Expected: {expected_total:.0f}')
+    ax1.set_xlabel('Time')
+    ax1.set_ylabel('Total Wealth')
+    ax1.set_title('Wealth Conservation Over Time')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    
+    # Deviation from expected
+    ax2 = axes[0, 1]
+    ax2.plot(deviation, 'r-', linewidth=2)
+    ax2.set_xlabel('Time')
+    ax2.set_ylabel('Deviation from Expected')
+    ax2.set_title(f'Max Deviation: {np.max(np.abs(deviation)):.2e}')
+    ax2.grid(True, alpha=0.3)
+    
+    # Wealth distribution evolution
+    ax3 = axes[1, 0]
+    mean_wealth = np.mean(bank_history, axis=1)
+    std_wealth = np.std(bank_history, axis=1)
+    min_wealth = np.min(bank_history, axis=1)
+    max_wealth = np.max(bank_history, axis=1)
+    
+    ax3.plot(mean_wealth, 'g-', linewidth=2, label='Mean')
+    ax3.fill_between(range(len(mean_wealth)), 
+                     mean_wealth - std_wealth, 
+                     mean_wealth + std_wealth, 
+                     alpha=0.3, color='green', label='±1 Std')
+    ax3.plot(min_wealth, 'b--', alpha=0.7, label='Min')
+    ax3.plot(max_wealth, 'r--', alpha=0.7, label='Max')
+    ax3.set_xlabel('Time')
+    ax3.set_ylabel('Wealth Statistics')
+    ax3.set_title('Wealth Distribution Statistics')
+    ax3.legend()
+    ax3.grid(True, alpha=0.3)
+    
+    # Final wealth histogram
+    ax4 = axes[1, 1]
+    final_wealth = bank_history[-1]
+    ax4.hist(final_wealth, bins=30, alpha=0.7, color='purple', edgecolor='black')
+    ax4.axvline(x=np.mean(final_wealth), color='red', linestyle='-', linewidth=2, 
+                label=f'Mean: {np.mean(final_wealth):.1f}')
+    ax4.axvline(x=np.median(final_wealth), color='orange', linestyle='-', linewidth=2, 
+                label=f'Median: {np.median(final_wealth):.1f}')
+    ax4.set_xlabel('Individual Wealth')
+    ax4.set_ylabel('Frequency')
+    ax4.set_title('Final Wealth Distribution')
+    ax4.legend()
+    ax4.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    
+    # Save figure
+    filepath = Path(output_dir) / "wealth_conservation_diagnostic.png"
+    plt.savefig(filepath, dpi=150, bbox_inches='tight', facecolor='white')
+    plt.close()
+    
+    return str(filepath)

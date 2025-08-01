@@ -26,9 +26,9 @@ Diversity Metrics:
 - Diversity change: -0.289
 
 Community Structure:
-- Number of communities: 11
-- Average community size: 30.9 (std: 26.3)
+- Number of communities: 10
+- Average community size: 30.0 (std: 27.4) if community_sizes else (0, 0)
 - Largest community: 105
 - Smallest community: 11
 
-Generated: 2025-07-31 13:56:21
+Generated: 2025-07-31 19:57:51

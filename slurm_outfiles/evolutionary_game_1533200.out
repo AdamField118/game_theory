@@ -1,0 +1,82 @@
+==============================================
+SEPARATED EVOLUTIONARY GAME SIMULATION
+==============================================
+Job ID: 1533200
+Job Name: drifting_communities
+Node: gpu-3-01
+Partition: short
+Start Time: Thu Jul 31 19:57:45 EDT 2025
+==============================================
+Environment activated
+Checking GPU availability...
+JAX devices: [CudaDevice(id=0)]
+Simulation Parameters:
+  Game type: wealth_mediated
+  Vertices: 300
+  Time steps: 400
+  Random seed: 42
+  --- Wealth-Mediated Parameters ---
+  δ (tie bonus): 0.0
+  ε (winning bonus): 16.0
+  Temperature: 100.0
+  β (beta): 0.01
+==============================================
+Starting simulation...
+Executing: python main.py     --payoff_scheme wealth_mediated     --vertices 300     --time_steps 400     --seed 42     --use_gpu     --save_data --delta 0.0 --epsilon 16.0 --temperature 100.0 --beta 0.01
+Output directories created in: /home/adfield/game_theory/plots
+======================================================================
+EVOLUTIONARY GAME SIMULATION
+======================================================================
+Game type: wealth_mediated
+Vertices: 300
+Time steps: 400
+Random seed: 42
+δ (tie bonus): 0.0
+ε (winning bonus): 16.0
+Temperature: 100.0
+β: 0.01
+Output dir: plots
+JAX devices: ['cuda:0']
+GPU acceleration available
+======================================================================
+Initialized game with payoff matrix:
+A(δ=0.0, ε=16.0) =
+[[ 1.  0. 18.]
+ [18.  1.  0.]
+ [ 0. 18.  1.]]
+Running wealth-mediated simulation...
+Simulation completed in 1.70 seconds
+Plot saved to: plots/evolution_d0.0_e16.0.png
+Data saved to: plots/data/simulation_d0.0_e16.0_20250731_195751.npz
+Parameters saved to: plots/data/simulation_d0.0_e16.0_20250731_195751_params.json
+Data saved to: plots/data/simulation_d0.0_e16.0_20250731_195751.npz
+Summary saved to: plots/analysis/summary_d0.0_e16.0_20250731_195751.txt
+
+Final state analysis:
+  Rock: 203 agents (67.7%)
+  Paper: 23 agents (7.7%)
+  Scissors: 74 agents (24.7%)
+======================================================================
+SIMULATION COMPLETE
+======================================================================
+==============================================
+Simulation completed with return code: 0
+End Time: Thu Jul 31 19:57:51 EDT 2025
+Output files generated:
+-rw-r--r-- 1 adfield adfield 53213 Jul 31 19:57 plots/evolution_d0.0_e16.0.png
+-rw-r--r-- 1 adfield adfield 68723 Jul 31 19:57 plots/evolution_d0.5_e0.0.png
+total 36
+drwxrwxr-x 2 adfield adfield     4 Jul 31 19:57 .
+drwxrwxr-x 5 adfield adfield     5 Jul 31 19:57 ..
+-rw-r--r-- 1 adfield adfield 12433 Jul 31 19:57 simulation_d0.0_e16.0_20250731_195751.npz
+-rw-r--r-- 1 adfield adfield   372 Jul 31 19:57 simulation_d0.0_e16.0_20250731_195751_params.json
+-rw-r--r-- 1 adfield adfield 22738 Jul 31 19:57 simulation_d0.5_e0.0_20250731_195751.npz
+-rw-r--r-- 1 adfield adfield   371 Jul 31 19:57 simulation_d0.5_e0.0_20250731_195751_params.json
+total 2
+drwxrwxr-x 2 adfield adfield   2 Jul 31 19:57 .
+drwxrwxr-x 5 adfield adfield   5 Jul 31 19:57 ..
+-rw-r--r-- 1 adfield adfield 728 Jul 31 19:57 summary_d0.0_e16.0_20250731_195751.txt
+-rw-r--r-- 1 adfield adfield 728 Jul 31 19:57 summary_d0.5_e0.0_20250731_195751.txt
+==============================================
+JOB COMPLETE
+==============================================

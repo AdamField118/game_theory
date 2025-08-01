@@ -2,9 +2,9 @@
 REPRODUCING FIGURE 1 FROM OLSON ET AL.
 ==========================================
 Submitting Job 1: Stationary Communities (δ=0.5, ε=0)
-Job ID: 1533002
+Job ID: 1533199
 Submitting Job 2: Drifting Communities (δ=0, ε=16)
-Job ID: 1533003
+Job ID: 1533200
 ==========================================
 Jobs submitted successfully!
 
@@ -14,7 +14,7 @@ Expected outputs:
   - plots/data/ (Simulation data files)
 ==========================================
 Submitting comparison job (dependent on completion of both simulations)...
-Comparison job ID: Submitted batch job 1533004
+Comparison job ID: Submitted batch job 1533201
 All jobs submitted.
 ============================================================
 GENERATING ANALYSIS PLOTS AND SUMMARIES

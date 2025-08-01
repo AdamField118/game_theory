@@ -1,15 +1,16 @@
 {
   "parameters": {
-    "delta": 0.0,
-    "epsilon": 16.0,
+    "payoff_scheme": "wealth_mediated",
     "vertices": 300,
     "time_steps": 400,
+    "seed": 42,
+    "delta": 0.0,
+    "epsilon": 16.0,
     "temperature": 100.0,
-    "beta": 0.01,
-    "seed": 42
+    "beta": 0.01
   },
   "metadata": {
-    "timestamp": "20250731_135621",
+    "timestamp": "20250731_195751",
     "shape": [
       400,
       300

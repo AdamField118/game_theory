@@ -3,7 +3,7 @@
 #SBATCH -N 1
 #SBATCH -n 2
 #SBATCH --mem-per-cpu=4g
-#SBATCH --partition=quick
+#SBATCH --partition=short
 #SBATCH --gres=gpu:1
 #SBATCH -J test_evolutionary_game
 #SBATCH --mail-type=FAIL
