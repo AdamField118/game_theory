@@ -33,25 +33,29 @@ export JAX_ENABLE_X64=True
 echo "Checking GPU availability..."
 python -c "import jax; print(f'JAX devices: {jax.devices()}')"
 
-# **GAME TYPE SELECTION** (NEW)
+# game type selection
 PAYOFF_SCHEME=${PAYOFF_SCHEME:-wealth_mediated}
 
-# **SHARED PARAMETERS**
+# Shared Parameters
 VERTICES=${VERTICES:-300}
 TIME_STEPS=${TIME_STEPS:-400}
 SEED=${SEED:-42}
 PRESET=${PRESET:-}
 
-# **WEALTH-MEDIATED SPECIFIC PARAMETERS**
+# Wealth-mediated specific parameters
 DELTA=${DELTA:-0.5}
 EPSILON=${EPSILON:-0.0}
 TEMPERATURE=${TEMPERATURE:-100.0}
 BETA=${BETA:-0.01}
 
-# **ZERO-SUM SPECIFIC PARAMETERS**
+# Zero-sum specific parameters
 INITIAL_PATTERN=${INITIAL_PATTERN:-random}
 INITIAL_BANK_VALUE=${INITIAL_BANK_VALUE:-0.0}
 STRIPE_SIZE=${STRIPE_SIZE:-}
+RESTRICT_TO_VISIBLE=${RESTRICT_TO_VISIBLE:-false}
+USE_AVERAGE_FITNESS=${USE_AVERAGE_FITNESS:-false}
+RESTRICT_TO_VISIBLE=${RESTRICT_TO_VISIBLE:-false}
+USE_AVERAGE_FITNESS=${USE_AVERAGE_FITNESS:-false}
 
 echo "Simulation Parameters:"
 echo "  Game type: $PAYOFF_SCHEME"
@@ -69,6 +73,8 @@ elif [ "$PAYOFF_SCHEME" = "zero_sum" ]; then
     echo "  --- Zero-Sum Parameters ---"
     echo "  Initial pattern: $INITIAL_PATTERN"
     echo "  Initial bank value: $INITIAL_BANK_VALUE"
+    echo "  Restrict to visible: $RESTRICT_TO_VISIBLE"
+    echo "  Use average fitness: $USE_AVERAGE_FITNESS"
     if [ -n "$STRIPE_SIZE" ]; then
         echo "  Stripe size: $STRIPE_SIZE"
     fi
@@ -100,6 +106,12 @@ elif [ "$PAYOFF_SCHEME" = "zero_sum" ]; then
     CMD="$CMD --initial_pattern $INITIAL_PATTERN --initial_bank_value $INITIAL_BANK_VALUE"
     if [ -n "$STRIPE_SIZE" ]; then
         CMD="$CMD --stripe_size $STRIPE_SIZE"
+    fi
+    if [ "$RESTRICT_TO_VISIBLE" = "true" ]; then
+        CMD="$CMD --restrict_to_visible"
+    fi
+    if [ "$USE_AVERAGE_FITNESS" = "true" ]; then
+        CMD="$CMD --use_average_fitness"
     fi
 fi
 

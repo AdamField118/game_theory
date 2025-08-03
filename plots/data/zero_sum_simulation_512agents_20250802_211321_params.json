@@ -1,0 +1,20 @@
+{
+  "parameters": {
+    "payoff_scheme": "zero_sum",
+    "vertices": 512,
+    "time_steps": 400,
+    "seed": 42,
+    "initial_pattern": "striped",
+    "initial_bank_value": -1000.0,
+    "stripe_size": 170
+  },
+  "metadata": {
+    "timestamp": "20250802_211321",
+    "shape": [
+      400,
+      512
+    ],
+    "n_strategies": 3,
+    "final_diversity": 0.9375686207037525
+  }
+}

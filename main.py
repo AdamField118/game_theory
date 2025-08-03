@@ -53,6 +53,11 @@ def parse_arguments():
                        help="Starting bank value for all agents")
     group_zero.add_argument("--stripe_size", type=int, default=None,
                        help="Size of each stripe (default: vertices//3)")
+
+    group_zero.add_argument("--restrict_to_visible", action="store_true",
+                       help="Only allow choice among locally visible strategies (advisor's Point 1)")
+    group_zero.add_argument("--use_average_fitness", action="store_true", 
+                       help="Use average bank per strategy instead of total (advisor's Point 2)")
     
     # Shared parameters
     group_sim = parser.add_argument_group('Simulation Parameters')
@@ -108,6 +113,8 @@ def apply_preset(args):
         args.initial_bank_value = -1000.0
         args.initial_pattern = "striped"
         args.stripe_size = args.vertices // 3
+        args.restrict_to_visible = True
+        args.use_average_fitness = False
         
     return args
 
@@ -131,7 +138,9 @@ def create_zero_sum_game(args):
         initial_pattern=args.initial_pattern,
         initial_bank_value=args.initial_bank_value,
         stripe_size=args.stripe_size,
-        seed=args.seed
+        seed=args.seed,
+        restrict_to_visible=args.restrict_to_visible,
+        use_average_fitness=args.use_average_fitness
     )
 
 
@@ -234,6 +243,8 @@ def main():
         if args.initial_pattern == "striped":
             stripe_size = args.stripe_size or args.vertices // 3
             print(f"Stripe size: {stripe_size}")
+        print(f"Restrict to visible: {args.restrict_to_visible}")
+        print(f"Use average fitness: {args.use_average_fitness}")
     
     print(f"Output dir: {args.output_dir}")
     

@@ -1,0 +1,60 @@
+
+ZERO-SUM EVOLUTIONARY GAME SIMULATION SUMMARY
+============================================
+
+System Configuration:
+- Game type: Zero-Sum Rock-Paper-Scissors
+- Selection method: Deterministic (argmax)
+- Vertices: 512
+- Time steps: 50
+- Initial pattern: striped
+- Initial bank value: -1000.0
+- Random seed: 42
+
+Zero-Sum Properties:
+- Payoff matrix: Winner +1, Loser -1, Tie 0
+- Total system wealth: -512000.0 (constant)
+- Wealth conservation: True
+- Max wealth deviation: 0.00e+00
+- Expected dynamics: Deterministic spatial patterns
+
+Initial Pattern Analysis:
+- Pattern type: striped
+- Initial wealth std: 0.00
+- Initial communities: 3
+- Largest initial community: 172
+
+Final State Analysis:
+- Rock (0): 172 agents (33.6%)
+- Paper (1): 170 agents (33.2%)
+- Scissors (2): 170 agents (33.2%)
+
+Diversity Evolution:
+- Initial Shannon diversity: 1.099
+- Final Shannon diversity: 1.099
+- Diversity change: +0.000
+
+Community Structure Evolution:
+Initial State:
+- Number of communities: 3
+- Average community size: 170.7 (std: 0.9) if initial_communities else (0, 0)
+- Largest community: 172
+
+Final State:
+- Number of communities: 15
+- Average community size: 32.1 (std: 21.5) if final_communities else (0, 0)
+- Largest community: 74
+
+Wealth Redistribution:
+- Initial wealth mean: -1000.00 ± 0.00
+- Final wealth mean: -1000.00 ± 1.02
+- Wealth redistribution: +1.02 (change in std)
+- Wealth range: [-1003.0, -997.0]
+
+Zero-Sum Validation:
+- Total wealth conserved: True
+- Expected total: -512000
+- Actual final total: -512000
+- Conservation error: 0.00e+00
+
+Generated: 2025-08-02 21:50:06

@@ -27,23 +27,29 @@ class ZeroSumEvolutionaryGame:
         initial_pattern: Literal["random", "striped"] = "striped",
         initial_bank_value: float = -1000.0,
         stripe_size: Optional[int] = None,
-        seed: int = 42
+        seed: int = 42,
+        restrict_to_visible: bool = False,
+        use_average_fitness: bool = False
     ):
         """
         Initialize the zero-sum evolutionary game.
-        
+
         Args:
             n_vertices: Number of vertices in the 1D lattice
             initial_pattern: "random" or "striped" initial strategy pattern
             initial_bank_value: Starting bank value for all agents
             stripe_size: Size of each stripe (if None, uses n_vertices//3 per strategy)
             seed: Random seed for reproducibility
+            restrict_to_visible: If True, only allow choice among locally visible strategies
+            use_average_fitness: If True, use average bank per strategy instead of total
         """
         self.n_vertices = n_vertices
         self.initial_pattern = initial_pattern
         self.initial_bank_value = initial_bank_value
         self.stripe_size = stripe_size if stripe_size is not None else n_vertices // 3
         self.seed = seed
+        self.restrict_to_visible = restrict_to_visible
+        self.use_average_fitness = use_average_fitness
         
         # Initialize random key
         self.key = jr.PRNGKey(seed)
@@ -65,6 +71,8 @@ class ZeroSumEvolutionaryGame:
         print(f"  Initial pattern: {initial_pattern}")
         print(f"  Initial bank value: {initial_bank_value}")
         print(f"  Stripe size: {self.stripe_size}")
+        print(f"  Restrict to visible strategies: {restrict_to_visible}")
+        print(f"  Use average fitness: {use_average_fitness}")
         print(f"  Total system wealth: {n_vertices * initial_bank_value}")
         print(f"  Zero-sum payoff matrix:")
         print(np.array(self.payoff_matrix))
@@ -122,8 +130,9 @@ class ZeroSumEvolutionaryGame:
         banks: jnp.ndarray
     ) -> jnp.ndarray:
         """
-        Calculate neighborhood bank values for deterministic selection.
-        For each vertex, sum bank values of neighbors playing each strategy.
+        Calculate neighborhood bank values with:
+        1. Restrict to visible: Only allow choice among locally present strategies
+        2. Average fitness: Use average bank per strategy, not total
         """
         # Get neighbor banks and strategies
         left_banks = jnp.roll(banks, 1)
@@ -131,21 +140,48 @@ class ZeroSumEvolutionaryGame:
         left_strategies = jnp.roll(strategies, 1)
         right_strategies = jnp.roll(strategies, -1)
         
-        # Initialize neighborhood bank sums for each strategy
+        # Initialize neighborhood bank sums and counts
         neighborhood_banks = jnp.zeros((self.n_vertices, 3))
+        strategy_counts = jnp.zeros((self.n_vertices, 3))
         
-        # Sum bank values for each strategy in the neighborhood (self + neighbors)
+        # Calculate sums and counts for each strategy in neighborhood
         for s in range(3):
             # Self contribution
-            self_contribution = jnp.where(strategies == s, banks, 0.0)
-            # Left neighbor contribution
-            left_contribution = jnp.where(left_strategies == s, left_banks, 0.0)
-            # Right neighbor contribution  
-            right_contribution = jnp.where(right_strategies == s, right_banks, 0.0)
+            self_mask = strategies == s
+            self_contribution = jnp.where(self_mask, banks, 0.0)
+            self_count = jnp.where(self_mask, 1.0, 0.0)
             
-            neighborhood_banks = neighborhood_banks.at[:, s].set(
-                self_contribution + left_contribution + right_contribution
-            )
+            # Left neighbor contribution
+            left_mask = left_strategies == s
+            left_contribution = jnp.where(left_mask, left_banks, 0.0)
+            left_count = jnp.where(left_mask, 1.0, 0.0)
+            
+            # Right neighbor contribution
+            right_mask = right_strategies == s
+            right_contribution = jnp.where(right_mask, right_banks, 0.0)
+            right_count = jnp.where(right_mask, 1.0, 0.0)
+            
+            # Total contribution and count for this strategy
+            total_contribution = self_contribution + left_contribution + right_contribution
+            total_count = self_count + left_count + right_count
+            
+            neighborhood_banks = neighborhood_banks.at[:, s].set(total_contribution)
+            strategy_counts = strategy_counts.at[:, s].set(total_count)
+        
+        # Apply Jackson's modifications
+        if self.use_average_fitness:
+            # Use average bank per strategy instead of total
+            # Avoid division by zero
+            safe_counts = jnp.where(strategy_counts > 0, strategy_counts, 1.0)
+            neighborhood_banks = neighborhood_banks / safe_counts
+            # Set to 0 where count was actually 0
+            neighborhood_banks = jnp.where(strategy_counts > 0, neighborhood_banks, 0.0)
+        
+        if self.restrict_to_visible:
+            # Only allow choice among locally visible strategies
+            # Set invisible strategies to -inf instead of 0
+            visible_mask = strategy_counts > 0
+            neighborhood_banks = jnp.where(visible_mask, neighborhood_banks, -jnp.inf)
         
         return neighborhood_banks
     
@@ -246,10 +282,12 @@ class ZeroSumEvolutionaryGame:
             "n_vertices": self.n_vertices,
             "initial_bank_value": self.initial_bank_value,
             "stripe_size": self.stripe_size,
+            "restrict_to_visible": self.restrict_to_visible,
+            "use_average_fitness": self.use_average_fitness,
             "total_initial_wealth": total_initial_wealth,
             "wealth_conservation": "Strict (zero-sum payoffs)",
             "payoff_matrix": np.array(self.payoff_matrix),
-            "expected_dynamics": "Deterministic spatial patterns with wealth conservation"
+            "expected_dynamics": f"Deterministic spatial patterns ({'visible-only' if self.restrict_to_visible else 'all-strategies'}, {'average' if self.use_average_fitness else 'total'} fitness)"
         }
     
     def verify_wealth_conservation(self, bank_history: jnp.ndarray) -> dict:
