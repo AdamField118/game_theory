@@ -113,6 +113,8 @@ And I ran the same simulation but with 6 vertices (agents) and 10 time steps:
 
 ## Analysis
 
-Notice the clear oscillation in the simple 6 vertices 10 time step game. This shows the deterministic nature. 
+Note that this is after the changed to visibilty, so each agent can only see the agent's bank values next to it.
 
-Note, Dr. Jackson gets different results here so this may or may not be incorrect.
+This is very pretty, it reminds me of fractal borders and it reminds Dr Jackson Henry of [rule 30](https://mathworld.wolfram.com/Rule30.html). 
+
+Note: Also functional in the code is the ability to use an average to determine the next result, since for example |R=2|P=4|R=2| previously from the Paper agent's perspective rock is a better choice, but now it basically adds up the rock agent's banks and divides by the amount of rock agents, gets 2 and chooses to stay as paper. This results in a bit of a weird graph that I am still workshopping.
